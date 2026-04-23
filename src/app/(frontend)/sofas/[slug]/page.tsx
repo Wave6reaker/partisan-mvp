@@ -39,10 +39,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     swatchUrl: fabric.swatch?.url || null,
   })) ?? [];
 
+  const fillings = product.fillings?.map((f: any) => ({
+    label: f.label,
+    priceAdder: f.priceAdder || 0,
+  })) ?? [];
+
   const configuratorProduct = {
     name: product.name,
     sizes: product.sizes ?? [],
     fabrics,
+    fillings,
     hasOrientation: product.hasOrientation ?? false,
   };
 

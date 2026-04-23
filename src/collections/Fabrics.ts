@@ -23,14 +23,10 @@ export const Fabrics: CollectionConfig = {
       name: 'category',
       type: 'select',
       label: 'Категория (цепная группа)',
-      options: [
-        { label: 'Категория 1', value: 'cat1' },
-        { label: 'Категория 2', value: 'cat2' },
-        { label: 'Категория 3', value: 'cat3' },
-        { label: 'Категория 4', value: 'cat4' },
-        { label: 'Категория 5', value: 'cat5' },
-        { label: 'Категория 6', value: 'cat6' },
-      ],
+      options: Array.from({ length: 20 }, (_, i) => ({
+        label: `Категория ${i + 1}`,
+        value: `cat${i + 1}`,
+      })),
       required: true,
     },
     {

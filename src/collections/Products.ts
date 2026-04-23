@@ -141,6 +141,18 @@ export const Products: CollectionConfig = {
       defaultValue: 'до 8 недель',
     },
     {
+      name: 'fillings',
+      type: 'array',
+      label: 'Наполнение',
+      admin: {
+        description: 'Варианты наполнения с доплатой. Если не заполнено — выбор наполнения не показывается.',
+      },
+      fields: [
+        { name: 'label', type: 'text', label: 'Название (напр. Пух натуральный)', required: true },
+        { name: 'priceAdder', type: 'number', label: 'Доплата (₽)', defaultValue: 0 },
+      ],
+    },
+    {
       name: 'hasOrientation',
       type: 'checkbox',
       label: 'Есть выбор угла (левый/правый)',
