@@ -1,4 +1,4 @@
-import type { CollectionConfig, FieldHook } from 'payload';
+import type { CollectionConfig, FieldHook, RichTextField } from 'payload';
 
 const formatSlug = (val: string): string => {
   const ru: { [key: string]: string } = {
@@ -139,6 +139,56 @@ export const Products: CollectionConfig = {
       type: 'text',
       label: 'Срок изготовления',
       defaultValue: 'до 8 недель',
+    },
+    {
+      name: 'infoSizesText',
+      type: 'richText',
+      label: 'Блок "Размеры" — дополнительный текст',
+      admin: { description: 'Текст под размерами. Поддерживает ссылки.' },
+    },
+    {
+      name: 'infoMaterials',
+      type: 'richText',
+      label: 'Блок "Материалы"',
+      admin: { description: 'Поддерживает ссылки.' },
+    },
+    {
+      name: 'infoAssembly',
+      type: 'richText',
+      label: 'Блок "Сборка"',
+    },
+    {
+      name: 'info3dFilesLabel',
+      type: 'text',
+      label: '3D файлы — название ссылки',
+      admin: { description: 'Если заполнено — секция "3D файлы" отображается.' },
+    },
+    {
+      name: 'info3dFilesUrl',
+      type: 'text',
+      label: '3D файлы — URL',
+    },
+    {
+      name: 'infoDelivery',
+      type: 'richText',
+      label: 'Блок "Доставка"',
+      admin: { description: 'Если не заполнено — используется текст по умолчанию.' },
+    },
+    {
+      name: 'infoDeliveryPricingLabel',
+      type: 'text',
+      label: 'Доставка — текст ссылки "стоимость доставки"',
+    },
+    {
+      name: 'infoDeliveryPricingUrl',
+      type: 'text',
+      label: 'Доставка — URL "стоимость доставки"',
+    },
+    {
+      name: 'infoReturn',
+      type: 'richText',
+      label: 'Блок "Обмен и возврат"',
+      admin: { description: 'Если не заполнено — используется текст по умолчанию.' },
     },
     {
       name: 'fillings',
