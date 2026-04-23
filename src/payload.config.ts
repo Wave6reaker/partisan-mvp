@@ -30,7 +30,6 @@ export default buildConfig({
     pool: {
       connectionString: process.env.SUPABASE_DATABASE_URL || '',
     },
-    push: true,
   }),
   plugins: [
     s3Storage({
