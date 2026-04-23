@@ -5,10 +5,10 @@ import path from 'path';
 import { buildConfig } from 'payload';
 import { fileURLToPath } from 'url';
 
-import { Users } from './collections/Users.js';
-import { Media } from './collections/Media.js';
-import { Fabrics } from './collections/Fabrics.js';
-import { Products } from './collections/Products.js';
+import { Users } from './collections/Users';
+import { Media } from './collections/Media';
+import { Fabrics } from './collections/Fabrics';
+import { Products } from './collections/Products';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
