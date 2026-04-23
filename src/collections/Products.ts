@@ -141,6 +141,15 @@ export const Products: CollectionConfig = {
       defaultValue: 'до 8 недель',
     },
     {
+      name: 'hasOrientation',
+      type: 'checkbox',
+      label: 'Есть выбор угла (левый/правый)',
+      defaultValue: false,
+      admin: {
+        description: 'Включи если товар бывает с левым и правым углом',
+      },
+    },
+    {
       name: 'inShowroom',
       type: 'checkbox',
       label: 'В шоуруме',
