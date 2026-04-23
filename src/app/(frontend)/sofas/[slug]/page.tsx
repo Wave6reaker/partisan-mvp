@@ -76,6 +76,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   })) ?? [];
 
   const configuratorProduct = {
+    id: product.id,
     name: product.name,
     sizes: product.sizes ?? [],
     fabrics,

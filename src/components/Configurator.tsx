@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 type Size = { label: string; dimensions: string; basePrice: number };
 
 type Product = {
+  id?: string;
   name: string;
   sizes: Size[];
   fabrics: Fabric[];
@@ -278,36 +279,121 @@ export default function Configurator({ product }: { product: Product }) {
       )}
 
       {/* Order Form */}
-      <div>
-        <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4">Оформить предзаказ</h3>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(e) => { e.preventDefault(); alert('Заказ отправлен!'); }}
+      <OrderForm
+        productId={product.id}
+        productName={product.name}
+        size={activeSize?.label}
+        fabric={activeFabric?.name}
+        fabricCategory={activeFabric ? catLabel(activeFabric.category) : undefined}
+        filling={activeFilling?.label}
+        orientation={product.hasOrientation ? selectedOrientation : undefined}
+        totalPrice={totalPrice}
+      />
+    </div>
+  );
+}
+
+type OrderFormProps = {
+  productId?: string;
+  productName: string;
+  size?: string;
+  fabric?: string;
+  fabricCategory?: string;
+  filling?: string;
+  orientation?: string;
+  totalPrice: number;
+};
+
+function OrderForm({ productId, productName, size, fabric, fabricCategory, filling, orientation, totalPrice }: OrderFormProps) {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [comment, setComment] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: name,
+          phone,
+          comment,
+          product: productId,
+          productName,
+          size,
+          fabric,
+          fabricCategory,
+          filling,
+          orientation,
+          totalPrice,
+          status: 'new',
+        }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus('success');
+      setName('');
+      setPhone('');
+      setComment('');
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <div className="border border-border p-8 text-center">
+        <div className="font-serif text-2xl mb-3">Заявка отправлена</div>
+        <p className="text-sm text-muted-foreground mb-6">Мы свяжемся с вами в ближайшее время.</p>
+        <button
+          onClick={() => setStatus('idle')}
+          className="text-xs uppercase tracking-widest underline hover:opacity-70 transition-opacity"
         >
-          <input
-            type="text"
-            placeholder="Ваше имя"
-            className="w-full p-4 border border-border bg-background outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground"
-            required
-          />
-          <input
-            type="tel"
-            placeholder="Телефон"
-            className="w-full p-4 border border-border bg-background outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground"
-            required
-          />
-          <textarea
-            placeholder="Комментарий (опционально)"
-            className="w-full p-4 border border-border bg-background outline-none focus:border-foreground transition-colors resize-none placeholder:text-muted-foreground h-24"
-          />
-          <button
-            type="submit"
-            className="w-full py-5 bg-foreground text-background font-bold text-xs uppercase tracking-widest hover:bg-foreground/90 transition-colors mt-2"
-          >
-            Отправить заявку
-          </button>
-        </form>
+          Оформить ещё одну
+        </button>
       </div>
+    );
+  }
+
+  return (
+    <div>
+      <h3 className="text-xs uppercase tracking-widest text-muted-foreground mb-4">Оформить предзаказ</h3>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Ваше имя"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full p-4 border border-border bg-background outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground"
+          required
+        />
+        <input
+          type="tel"
+          placeholder="Телефон"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          className="w-full p-4 border border-border bg-background outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground"
+          required
+        />
+        <textarea
+          placeholder="Комментарий (опционально)"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          className="w-full p-4 border border-border bg-background outline-none focus:border-foreground transition-colors resize-none placeholder:text-muted-foreground h-24"
+        />
+        {status === 'error' && (
+          <p className="text-sm text-red-500">Произошла ошибка. Попробуйте ещё раз.</p>
+        )}
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="w-full py-5 bg-foreground text-background font-bold text-xs uppercase tracking-widest hover:bg-foreground/90 transition-colors mt-2 disabled:opacity-50"
+        >
+          {status === 'loading' ? 'Отправка...' : 'Отправить заявку'}
+        </button>
+      </form>
     </div>
   );
 }
