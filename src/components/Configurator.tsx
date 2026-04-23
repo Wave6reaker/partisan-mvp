@@ -67,9 +67,9 @@ export default function Configurator({ product }: { product: Product }) {
   const activeFilling = selectedFilling ?? product.fillings[0] ?? null;
 
   const totalPrice =
-    (activeSize?.basePrice ?? 0) +
-    (activeFabric?.priceAdder ?? 0) +
-    (activeFilling?.priceAdder ?? 0);
+    (Number(activeSize?.basePrice) || 0) +
+    (Number(activeFabric?.priceAdder) || 0) +
+    (Number(activeFilling?.priceAdder) || 0);
 
   const [catOpen, setCatOpen] = useState(false);
   const catRef = useRef<HTMLDivElement>(null);
@@ -156,7 +156,7 @@ export default function Configurator({ product }: { product: Product }) {
                 >
                   <span className="font-medium">{filling.label}</span>
                   <span className="text-sm opacity-80">
-                    {filling.priceAdder === 0 ? '—' : `+${filling.priceAdder.toLocaleString('ru-RU')} ₽`}
+                    {!filling.priceAdder ? '—' : `+${Number(filling.priceAdder).toLocaleString('ru-RU')} ₽`}
                   </span>
                 </button>
               );
@@ -256,18 +256,18 @@ export default function Configurator({ product }: { product: Product }) {
         <div className="pt-4 border-t border-border text-xs text-muted-foreground flex flex-col gap-1.5">
           <div className="flex justify-between">
             <span>Базовая цена ({activeSize.label})</span>
-            <span>{activeSize.basePrice.toLocaleString('ru-RU')} ₽</span>
+            <span>{(Number(activeSize.basePrice) || 0).toLocaleString('ru-RU')} ₽</span>
           </div>
-          {activeFabric && activeFabric.priceAdder > 0 && (
+          {activeFabric && Number(activeFabric.priceAdder) > 0 && (
             <div className="flex justify-between">
               <span>Обивка ({catLabel(activeFabric.category)})</span>
-              <span>+{activeFabric.priceAdder.toLocaleString('ru-RU')} ₽</span>
+              <span>+{Number(activeFabric.priceAdder).toLocaleString('ru-RU')} ₽</span>
             </div>
           )}
-          {activeFilling && activeFilling.priceAdder > 0 && (
+          {activeFilling && Number(activeFilling.priceAdder) > 0 && (
             <div className="flex justify-between">
               <span>Наполнение ({activeFilling.label})</span>
-              <span>+{activeFilling.priceAdder.toLocaleString('ru-RU')} ₽</span>
+              <span>+{Number(activeFilling.priceAdder).toLocaleString('ru-RU')} ₽</span>
             </div>
           )}
           <div className="flex justify-between font-medium text-foreground pt-1 border-t border-border/50 mt-1">
